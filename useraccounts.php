@@ -1,62 +1,56 @@
 <?php
 require 'vendor/autoload.php';
-
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
+use Ramsey\Uuid\Uuid;
 
 // Initialize Faker
 $faker = Faker\Factory::create();
+echo "<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Fake User Accounts</title>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
+    </head>
+<body>
+    <div class='container mt-4'>
+        <h2 class='text-center'>Fake User Accounts</h2>
+        <table class='table table-bordered text-center'>
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Username</th>
+                    <th>Password (SHA-256)</th>
+                    <th>Account Created</th>
+                </tr>
+            </thead>
+            <tbody>";
 
-function generateUUID() {
-    return sprintf(
-        '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-        mt_rand(0, 0xffff), mt_rand(0, 0xffff),
-        mt_rand(0, 0xffff),
-        mt_rand(0, 0x0fff) | 0x4000,
-        mt_rand(0, 0x3fff) | 0x8000,
-        mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
-    );
-}
-
-// Insert fake users into database
-for ($i = 0; $i < 10; $i++) {
-    $uuid = generateUUID();
-    $full_name = $faker->name;
-    $email = $faker->unique()->safeEmail;
-    $username = strtolower(explode('@', $email)[0]);
-    $raw_password = $faker->password;
-    $password_hash = hash('sha256', $raw_password);
+// Generate 10 fake user accounts
+for ($i = 1; $i <= 10; $i++) {
+    $uuid = Uuid::uuid4()->toString(); // Generate UUID
+    $full_name = $faker->name();
+    $email = $faker->email();
+    $username = explode('@', $email)[0]; // Extract username from email
+    $password = hash('sha256', $faker->password()); // Encrypt password
     $account_created = $faker->dateTimeBetween('-2 years', 'now')->format('Y-m-d H:i:s');
 
-    $sql = "INSERT INTO users (user_id, full_name, email, username, password_hash, account_created) 
-            VALUES ('$uuid', '$full_name', '$email', '$username', '$password_hash', '$account_created')";
-
-    $conn->query($sql);
+    echo "<tr>
+        <td>{$uuid}</td>
+        <td>{$full_name}</td>
+        <td>{$email}</td>
+        <td>{$username}</td>
+        <td>{$password}</td>
+        <td>{$account_created}</td>
+    </tr>";
 }
 
-// Fetch users from database
-$result = $conn->query("SELECT * FROM users");
+echo "        </tbody>
+        </table>
+    </div>
+</body>
+</html>";
 
-// Display in an HTML table
-echo "<table border='1' cellpadding='5' cellspacing='0' style='border-collapse: collapse; width: 100%; text-align: left;'>";
-echo "<tr><th>User ID</th><th>Full Name</th><th>Email</th><th>Username</th><th>Password (SHA-256)</th><th>Account Created</th></tr>";
-
-while ($row = $result->fetch_assoc()) {
-    echo "<tr>";
-    echo "<td>{$row['user_id']}</td>";
-    echo "<td>{$row['full_name']}</td>";
-    echo "<td>{$row['email']}</td>";
-    echo "<td>{$row['username']}</td>";
-    echo "<td>{$row['password_hash']}</td>";
-    echo "<td>{$row['account_created']}</td>";
-    echo "</tr>";
-}
-
-echo "</table>";
-
-// Close connection
-$conn->close();
 ?>
