@@ -28,13 +28,13 @@ echo "<!DOCTYPE html>
             </thead>
             <tbody>";
 
-// Generate 10 fake user accounts
+
 for ($i = 1; $i <= 10; $i++) {
-    $uuid = Uuid::uuid4()->toString(); // Generate UUID
+    $uuid = Uuid::uuid4()->toString(); 
     $full_name = $faker->name();
     $email = $faker->email();
-    $username = explode('@', $email)[0]; // Extract username from email
-    $password = hash('sha256', $faker->password()); // Encrypt password
+    $username = explode('@', $email)[0]; 
+    $password = hash('sha256', $faker->password());
     $account_created = $faker->dateTimeBetween('-2 years', 'now')->format('Y-m-d H:i:s');
 
     echo "<tr>
