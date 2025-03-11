@@ -27,7 +27,7 @@ for ($kb = 0; $kb < 5; $kb++){
     $stmt->close();
 }
 
-$result = $conn->query("SELECT * FROM users");
+$result = $conn->query("SELECT * FROM users ORDER BY id DESC LIMIT 5");
 
 echo "<!DOCTYPE html>
 <html lang='en'>
@@ -50,17 +50,17 @@ echo "<!DOCTYPE html>
             <th>Job Title</th>
         </tr>";
 
-while ($row = $result->fetch_assoc()) {
-    echo "<tr>
-        <td>{$row['id']}</td>
-        <td>{$row['full_name']}</td>
-        <td>{$row['email']}</td>
-        <td>{$row['phone_number']}</td>
-        <td>{$row['address']}</td>
-        <td>{$row['birthdate']}</td>
-        <td>{$row['job_title']}</td>
-    </tr>";
-}
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr>
+                <td>{$row['id']}</td>
+                <td>{$row['full_name']}</td>
+                <td>{$row['email']}</td>
+                <td>{$row['phone_number']}</td>
+                <td>{$row['address']}</td>
+                <td>{$row['birthdate']}</td>
+                <td>{$row['job_title']}</td>
+            </tr>";
+        }
 
 echo "</table></body></html>";
 
