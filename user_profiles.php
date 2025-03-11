@@ -13,6 +13,26 @@ echo "<!DOCTYPE html>
     <title>Fake User Profiles</title>
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet'>
 </head>
+<style>
+        body {
+            background-color: #000; 
+            color: white; 
+            font-size: 0.7rem;
+        }
+        .table {
+            background-color:rgb(66, 142, 107); 
+            color: white; 
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .table th {
+            background-color: #145c32; 
+            color: white;
+        }
+        .table td {
+            border-color: white; 
+        }
+    </style>
 <body class='container mt-4'>
     <h2>Fake User Profiles</h2>
     <table class='table table-bordered'>
